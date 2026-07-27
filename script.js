@@ -263,4 +263,82 @@ function renderAnimeCards(items) {
   }).join("");
 }
 
+// --- FONCTIONS INTEGRATION IA GEMINI ---
+
+// Fonction principale pour appeler l'API Google Gemini
+async function runGeminiAnalysis() {
+  const resultDiv = document.getElementById("aiResult");
+  const btn = document.getElementById("geminiBtn");
+
+  // 1. Récupérer ou demander la clé API Gemini
+  let apiKey = localStorage.getItem("GEMINI_API_KEY");
+  if (!apiKey) {
+    apiKey = prompt("Entre ta clé API Google Gemini (gratuite sur Google AI Studio) :");
+    if (!apiKey) return;
+    localStorage.setItem("GEMINI_API_KEY", apiKey.trim());
+  }
+
+  resultDiv.textContent = "🧠 Gemini analyse tes goûts d'otaku en profondeur... Patientez...";
+  btn.disabled = true;
+
+  try {
+    // 2. Charger les données si elles ne sont pas déjà en mémoire
+    const dataResp = await fetch("./data/data.json");
+    const data = await dataResp.json();
+    const animelist = data.animelist || [];
+
+    // Formater un résumé épuré de la liste pour ne pas surcharger le prompt
+    const userSummary = animelist.map(item => {
+      return `- ${item.node.title} | Note: ${item.list_status.score || 'Non noté'}/10 | Statut: ${item.list_status.status}`;
+    }).join("\n");
+
+    // 3. Préparer le Prompt Gemini
+    const promptText = `
+Voici la liste d'animes consultés et notés par l'utilisateur "${data.username || 'Otaku'}":
+
+${userSummary}
+
+En te basant sur ses notes et ses choix, fais une analyse amusante, précise et pertinente de son profil en suivant exactement ces 4 points :
+
+1. 🎯 **Ce qu'il aime particulièrement** (Thèmes, genres, styles d'animes qui ressortent de ses bonnes notes).
+2. 🚫 **Ce qu'il n'aime pas ou évite** (D'après ses mauvaises notes, animes abandonnés ou absents).
+3. 👤 **Le Personnage d'Anime qui lui ressemble le plus** (Choisis un personnage célèbre et explique avec humour et précision pourquoi sa personnalité/ses goûts collent avec ce profil).
+4. 🍿 **3 Recommandations Sur-Mesure** (Animes qu'il n'a PAS encore vus dans sa liste, avec 1 phrase d'explication personnalisée pour chaque).
+
+Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
+`;
+
+    // 4. Appel de l'API Gemini 1.5 Flash (Gratuite et ultra rapide)
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: promptText }] }]
+      })
+    });
+
+    const resData = await response.json();
+
+    if (resData.error) {
+      throw new Error(resData.error.message || "Erreur de la clé API");
+    }
+
+    const aiAnswer = resData.candidates[0].content.parts[0].text;
+    resultDiv.innerHTML = formatMarkdownText(aiAnswer);
+
+  } catch (err) {
+    console.error(err);
+    resultDiv.textContent = "❌ Erreur lors de l'analyse : " + err.message + ". Assure-toi que ta clé API Gemini est valide.";
+    // Permet de réinitialiser la clé si elle était mauvaise
+    localStorage.removeItem("GEMINI_API_KEY");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// Petite fonction simple pour convertir le gras (**texte**) en <strong> sans grosse librairie
+function formatMarkdownText(text) {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
 document.addEventListener("DOMContentLoaded", loadDashboardData);
