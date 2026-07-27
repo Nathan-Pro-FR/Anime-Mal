@@ -3,7 +3,7 @@ import json
 import requests
 
 CLIENT_ID = os.environ.get("MAL_CLIENT_ID")
-USERNAME = "TON_PSEUDO_MAL"  # <-- Mets ton pseudo MAL ici
+USERNAME = "Neku_lax"  # <-- Mets ton pseudo MAL ici
 
 BASE_URL = "https://api.myanimelist.net/v2"
 HEADERS = {"X-MAL-CLIENT-ID": CLIENT_ID}
