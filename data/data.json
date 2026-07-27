@@ -1,3 +1,864 @@
 {
-  "top_airing": []
+  "top_airing": [
+    {
+      "node": {
+        "id": 61316,
+        "title": "Re:Zero kara Hajimeru Isekai Seikatsu 4th Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1540/155824.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1540/155824l.jpg"
+        },
+        "mean": 9.16,
+        "num_episodes": 19,
+        "genres": [
+          {
+            "id": 8,
+            "name": "Drama"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 62,
+            "name": "Isekai"
+          },
+          {
+            "id": 40,
+            "name": "Psychological"
+          },
+          {
+            "id": 41,
+            "name": "Suspense"
+          },
+          {
+            "id": 78,
+            "name": "Time Travel"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 1
+      }
+    },
+    {
+      "node": {
+        "id": 61469,
+        "title": "Steel Ball Run: JoJo no Kimyou na Bouken",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1448/154111.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1448/154111l.jpg"
+        },
+        "mean": 9.1,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 7,
+            "name": "Mystery"
+          },
+          {
+            "id": 3,
+            "name": "Racing"
+          },
+          {
+            "id": 42,
+            "name": "Seinen"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          },
+          {
+            "id": 37,
+            "name": "Supernatural"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 2
+      }
+    },
+    {
+      "node": {
+        "id": 60636,
+        "title": "Bleach: Sennen Kessen-hen - Kashin-tan",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1275/158595.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1275/158595l.jpg"
+        },
+        "mean": 9.05,
+        "num_episodes": 10,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          },
+          {
+            "id": 37,
+            "name": "Supernatural"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 3
+      }
+    },
+    {
+      "node": {
+        "id": 59193,
+        "title": "Mushoku Tensei III: Isekai Ittara Honki Dasu",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1527/158340.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1527/158340l.jpg"
+        },
+        "mean": 8.76,
+        "num_episodes": 14,
+        "genres": [
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 8,
+            "name": "Drama"
+          },
+          {
+            "id": 9,
+            "name": "Ecchi"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 62,
+            "name": "Isekai"
+          },
+          {
+            "id": 72,
+            "name": "Reincarnation"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 4
+      }
+    },
+    {
+      "node": {
+        "id": 21,
+        "title": "One Piece",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1244/138851.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1244/138851l.jpg"
+        },
+        "mean": 8.73,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 5
+      }
+    },
+    {
+      "node": {
+        "id": 50250,
+        "title": "Chiikawa",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1783/121944.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1783/121944l.jpg"
+        },
+        "mean": 8.6,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 36,
+            "name": "Slice of Life"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 6
+      }
+    },
+    {
+      "node": {
+        "id": 60988,
+        "title": "Tian Guan Cifu Short Films",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1174/149943.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1174/149943l.jpg"
+        },
+        "mean": 8.49,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 8,
+            "name": "Drama"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 6,
+            "name": "Mythology"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 7
+      }
+    },
+    {
+      "node": {
+        "id": 55809,
+        "title": "Xian Ni",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1289/149708.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1289/149708l.jpg"
+        },
+        "mean": 8.48,
+        "num_episodes": 180,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 8
+      }
+    },
+    {
+      "node": {
+        "id": 61483,
+        "title": "Tenmaku no Jaadugar",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1098/158891.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1098/158891l.jpg"
+        },
+        "mean": 8.42,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 8,
+            "name": "Drama"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 9
+      }
+    },
+    {
+      "node": {
+        "id": 51039,
+        "title": "Doupo Cangqiong: Nian Fan",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1419/126374.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1419/126374l.jpg"
+        },
+        "mean": 8.41,
+        "num_episodes": 219,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 10
+      }
+    },
+    {
+      "node": {
+        "id": 62542,
+        "title": "Grand Blue Season 3",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1615/158194.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1615/158194l.jpg"
+        },
+        "mean": 8.4,
+        "num_episodes": 12,
+        "genres": [
+          {
+            "id": 50,
+            "name": "Adult Cast"
+          },
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 57,
+            "name": "Gag Humor"
+          },
+          {
+            "id": 42,
+            "name": "Seinen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 11
+      }
+    },
+    {
+      "node": {
+        "id": 62076,
+        "title": "Super no Ura de Yani Suu Futari",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1768/156339.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1768/156339l.jpg"
+        },
+        "mean": 8.39,
+        "num_episodes": 12,
+        "genres": [
+          {
+            "id": 50,
+            "name": "Adult Cast"
+          },
+          {
+            "id": 74,
+            "name": "Love Status Quo"
+          },
+          {
+            "id": 22,
+            "name": "Romance"
+          },
+          {
+            "id": 42,
+            "name": "Seinen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 12
+      }
+    },
+    {
+      "node": {
+        "id": 49233,
+        "title": "Youjo Senki II",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1917/158371.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1917/158371l.jpg"
+        },
+        "mean": 8.39,
+        "num_episodes": 12,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 62,
+            "name": "Isekai"
+          },
+          {
+            "id": 38,
+            "name": "Military"
+          },
+          {
+            "id": 72,
+            "name": "Reincarnation"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 13
+      }
+    },
+    {
+      "node": {
+        "id": 63832,
+        "title": "Seihantai na Kimi to Boku 2nd Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1143/158409.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1143/158409l.jpg"
+        },
+        "mean": 8.38,
+        "num_episodes": 13,
+        "genres": [
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 22,
+            "name": "Romance"
+          },
+          {
+            "id": 23,
+            "name": "School"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 14
+      }
+    },
+    {
+      "node": {
+        "id": 56524,
+        "title": "Tunshi Xingkong 4th Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1335/138907.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1335/138907l.jpg"
+        },
+        "mean": 8.32,
+        "num_episodes": 175,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          },
+          {
+            "id": 24,
+            "name": "Sci-Fi"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 15
+      }
+    },
+    {
+      "node": {
+        "id": 59953,
+        "title": "Mushen Ji",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1324/150012.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1324/150012l.jpg"
+        },
+        "mean": 8.29,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 16
+      }
+    },
+    {
+      "node": {
+        "id": 235,
+        "title": "Meitantei Conan",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/7/75199.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/7/75199l.jpg"
+        },
+        "mean": 8.18,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 39,
+            "name": "Detective"
+          },
+          {
+            "id": 7,
+            "name": "Mystery"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 17
+      }
+    },
+    {
+      "node": {
+        "id": 62811,
+        "title": "Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 3rd Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1106/157174.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1106/157174l.jpg"
+        },
+        "mean": 8.15,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 35,
+            "name": "Harem"
+          },
+          {
+            "id": 20,
+            "name": "Parody"
+          },
+          {
+            "id": 22,
+            "name": "Romance"
+          },
+          {
+            "id": 23,
+            "name": "School"
+          },
+          {
+            "id": 42,
+            "name": "Seinen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 18
+      }
+    },
+    {
+      "node": {
+        "id": 44042,
+        "title": "Holo no Graffiti",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1259/110227.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1259/110227l.jpg"
+        },
+        "mean": 8.13,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 4,
+            "name": "Comedy"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 19
+      }
+    },
+    {
+      "node": {
+        "id": 59970,
+        "title": "Tensei shitara Slime Datta Ken 4th Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1695/156389.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1695/156389l.jpg"
+        },
+        "mean": 8.13,
+        "num_episodes": 24,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 62,
+            "name": "Isekai"
+          },
+          {
+            "id": 72,
+            "name": "Reincarnation"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 20
+      }
+    },
+    {
+      "node": {
+        "id": 60310,
+        "title": "Mairimashita! Iruma-kun 4th Season",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1434/154048.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1434/154048l.jpg"
+        },
+        "mean": 8.11,
+        "num_episodes": 24,
+        "genres": [
+          {
+            "id": 4,
+            "name": "Comedy"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 23,
+            "name": "School"
+          },
+          {
+            "id": 27,
+            "name": "Shounen"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 21
+      }
+    },
+    {
+      "node": {
+        "id": 51836,
+        "title": "Douluo Dalu II: Jueshi Tangmen",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1357/154563.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1357/154563l.jpg"
+        },
+        "mean": 8.04,
+        "num_episodes": 182,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 22
+      }
+    },
+    {
+      "node": {
+        "id": 58929,
+        "title": "Koukaku Kidoutai (TV)",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1474/158937.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1474/158937l.jpg"
+        },
+        "mean": 7.96,
+        "num_episodes": 0,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 50,
+            "name": "Adult Cast"
+          },
+          {
+            "id": 39,
+            "name": "Detective"
+          },
+          {
+            "id": 7,
+            "name": "Mystery"
+          },
+          {
+            "id": 40,
+            "name": "Psychological"
+          },
+          {
+            "id": 24,
+            "name": "Sci-Fi"
+          },
+          {
+            "id": 42,
+            "name": "Seinen"
+          },
+          {
+            "id": 41,
+            "name": "Suspense"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 23
+      }
+    },
+    {
+      "node": {
+        "id": 63240,
+        "title": "Fanren Xiu Xian Zhuan: Mulan Zhi Zhan",
+        "main_picture": {
+          "medium": "https://cdn.myanimelist.net/images/anime/1132/158458.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1132/158458l.jpg"
+        },
+        "mean": 7.93,
+        "num_episodes": 52,
+        "genres": [
+          {
+            "id": 1,
+            "name": "Action"
+          },
+          {
+            "id": 2,
+            "name": "Adventure"
+          },
+          {
+            "id": 10,
+            "name": "Fantasy"
+          },
+          {
+            "id": 13,
+            "name": "Historical"
+          },
+          {
+            "id": 17,
+            "name": "Martial Arts"
+          }
+        ]
+      },
+      "ranking": {
+        "rank": 24
+      }
+    }
+  ]
 }
