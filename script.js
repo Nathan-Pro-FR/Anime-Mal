@@ -1,11 +1,21 @@
+let appConfig = null;
+
 async function loadDashboardData() {
   const statusDiv = document.getElementById("status");
 
   try {
-    const response = await fetch("./data/data.json");
-    if (!response.ok) throw new Error("Impossible de charger data/data.json");
+    // 1. Charger la configuration
+    const configResp = await fetch("./config.json");
+    if (configResp.ok) {
+      appConfig = await configResp.json();
+      applyThemeConfig(appConfig.theme);
+    }
+
+    // 2. Charger les données MyAnimeList
+    const dataResp = await fetch("./data/data.json");
+    if (!dataResp.ok) throw new Error("Impossible de charger data/data.json");
     
-    const data = await response.json();
+    const data = await dataResp.json();
     const animelist = data.animelist || [];
     
     if (data.username) {
@@ -14,23 +24,32 @@ async function loadDashboardData() {
 
     statusDiv.textContent = "";
 
-    // 1. Calculer les statistiques (temps en j/h/m & statuts)
+    // 3. Calculer les statistiques et générer l'affichage
     computeStats(animelist);
-
-    // 2. Générer les 3 graphiques Chart.js
     renderStatusChart(animelist);
     renderGenreChart(animelist);
     renderFormatChart(animelist);
-
-    // 3. Afficher les cartes d'animes
     renderAnimeCards(animelist);
 
   } catch (err) {
-    statusDiv.textContent = "Erreur de chargement des données. Vérifie que data/data.json existe.";
+    statusDiv.textContent = "Erreur de chargement des données. Vérifie la présence de config.json et data/data.json.";
     console.error(err);
   }
 }
 
+// Applique les couleurs de thème définies dans config.json aux variables CSS
+function applyThemeConfig(theme) {
+  if (!theme) return;
+  const root = document.documentElement;
+  if (theme.bgColor) root.style.setProperty('--bg-color', theme.bgColor);
+  if (theme.cardBg) root.style.setProperty('--card-bg', theme.cardBg);
+  if (theme.accentCyan) root.style.setProperty('--accent-cyan', theme.accentCyan);
+  if (theme.accentMagenta) root.style.setProperty('--accent-magenta', theme.accentMagenta);
+  if (theme.textMain) root.style.setProperty('--text-main', theme.textMain);
+  if (theme.textMuted) root.style.setProperty('--text-muted', theme.textMuted);
+}
+
+// Calcul des chiffres clés (épisodes, score, temps en jours / heures / minutes)
 function computeStats(list) {
   let totalEps = 0;
   let totalScore = 0;
@@ -45,11 +64,10 @@ function computeStats(list) {
     
     totalEps += watchedEps;
     
-    // Compter les statuts
     if (status.status === "completed") completedCount++;
     if (status.status === "watching") watchingCount++;
 
-    // Calcul de la durée (secondes)
+    // Durée moyenne d'un épisode (en sec) ou 24 min par défaut
     const epDurationSeconds = item.node.average_episode_duration || (24 * 60);
     totalSeconds += watchedEps * epDurationSeconds;
 
@@ -59,13 +77,13 @@ function computeStats(list) {
     }
   });
 
-  // Convertit les secondes en Jours, Heures ET Minutes
+  // Conversion en Jours, Heures et Minutes
   const totalMinutes = Math.floor(totalSeconds / 60);
   const days = Math.floor(totalMinutes / (24 * 60));
   const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
   const minutes = totalMinutes % 60;
 
-  // Mise à jour de l'affichage HTML
+  // Mise à jour du HTML
   document.getElementById("totalAnime").textContent = list.length;
   document.getElementById("completedAnime").textContent = completedCount;
   document.getElementById("watchingAnime").textContent = watchingCount;
@@ -74,6 +92,7 @@ function computeStats(list) {
   document.getElementById("meanScore").textContent = scoredCount > 0 ? (totalScore / scoredCount).toFixed(2) + " / 10" : "N/A";
 }
 
+// Graphique 1 : Répartition par Statut (En cours, Terminé, etc.)
 function renderStatusChart(list) {
   const statusCounts = { watching: 0, completed: 0, on_hold: 0, dropped: 0, plan_to_watch: 0 };
 
@@ -81,6 +100,28 @@ function renderStatusChart(list) {
     const s = item.list_status.status;
     if (statusCounts[s] !== undefined) statusCounts[s]++;
   });
+
+  const defaultColors = {
+    watching: '#00f0ff',
+    completed: '#ff007f',
+    on_hold: '#ffd700',
+    dropped: '#ff4d4d',
+    plan_to_watch: '#a0aec0'
+  };
+
+  const userColors = (appConfig && appConfig.chartColors && appConfig.chartColors.status) 
+    ? appConfig.chartColors.status 
+    : {};
+
+  const colors = [
+    userColors.watching || defaultColors.watching,
+    userColors.completed || defaultColors.completed,
+    userColors.on_hold || defaultColors.on_hold,
+    userColors.dropped || defaultColors.dropped,
+    userColors.plan_to_watch || defaultColors.plan_to_watch
+  ];
+
+  const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim() || '#e2e8f0';
 
   const ctx = document.getElementById('statusChart').getContext('2d');
   new Chart(ctx, {
@@ -95,13 +136,14 @@ function renderStatusChart(list) {
           statusCounts.dropped,
           statusCounts.plan_to_watch
         ],
-        backgroundColor: ['#00f0ff', '#ff007f', '#ffd700', '#ff4d4d', '#a0aec0']
+        backgroundColor: colors
       }]
     },
-    options: { plugins: { legend: { labels: { color: '#e2e8f0' } } } }
+    options: { plugins: { legend: { labels: { color: textColor } } } }
   });
 }
 
+// Graphique 2 : Top 5 Genres
 function renderGenreChart(list) {
   const genreCounts = {};
 
@@ -113,6 +155,11 @@ function renderGenreChart(list) {
   });
 
   const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const barColor = (appConfig && appConfig.chartColors && appConfig.chartColors.genres) 
+    ? appConfig.chartColors.genres 
+    : '#00f0ff';
+
+  const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim() || '#e2e8f0';
 
   const ctx = document.getElementById('genreChart').getContext('2d');
   new Chart(ctx, {
@@ -122,49 +169,74 @@ function renderGenreChart(list) {
       datasets: [{
         label: "Nombre d'animes",
         data: sortedGenres.map(g => g[1]),
-        backgroundColor: '#00f0ff'
+        backgroundColor: barColor
       }]
     },
     options: {
       scales: {
-        y: { ticks: { color: '#e2e8f0' } },
-        x: { ticks: { color: '#e2e8f0' } }
+        y: { ticks: { color: textColor } },
+        x: { ticks: { color: textColor } }
       },
-      plugins: { legend: { labels: { color: '#e2e8f0' } } }
+      plugins: { legend: { labels: { color: textColor } } }
     }
   });
 }
 
+// Graphique 3 : Formats (TV, Movie, OVA...)
 function renderFormatChart(list) {
   const formatCounts = {};
 
   list.forEach(item => {
-    const format = (item.node.media_type || "Inconnu").toUpperCase();
+    const format = (item.node.media_type || "other").toLowerCase();
     formatCounts[format] = (formatCounts[format] || 0) + 1;
   });
+
+  const defaultFormatColors = {
+    tv: '#00f0ff',
+    movie: '#ff007f',
+    ova: '#ffd700',
+    ona: '#00ff88',
+    special: '#9900ff',
+    music: '#ff9900',
+    other: '#a0aec0'
+  };
+
+  const userFormatColors = (appConfig && appConfig.chartColors && appConfig.chartColors.formats) 
+    ? appConfig.chartColors.formats 
+    : {};
+
+  const labels = Object.keys(formatCounts).map(fmt => fmt.toUpperCase());
+  const dataValues = Object.values(formatCounts);
+  
+  const colors = Object.keys(formatCounts).map(fmt => {
+    return userFormatColors[fmt] || defaultFormatColors[fmt] || defaultFormatColors.other;
+  });
+
+  const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim() || '#e2e8f0';
 
   const ctx = document.getElementById('formatChart').getContext('2d');
   new Chart(ctx, {
     type: 'polarArea',
     data: {
-      labels: Object.keys(formatCounts),
+      labels: labels,
       datasets: [{
-        data: Object.values(formatCounts),
-        backgroundColor: ['#00f0ff', '#ff007f', '#ffd700', '#00ff88', '#9900ff', '#ff9900']
+        data: dataValues,
+        backgroundColor: colors
       }]
     },
     options: {
-      plugins: { legend: { labels: { color: '#e2e8f0' } } },
+      plugins: { legend: { labels: { color: textColor } } },
       scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false } } }
     }
   });
 }
 
+// Rendu de la grille des cartes d'animes
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
   
   if (items.length === 0) {
-    resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé.</p>";
+    resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé dans votre liste.</p>";
     return;
   }
 
