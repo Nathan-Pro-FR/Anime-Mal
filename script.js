@@ -3,7 +3,7 @@ async function loadDashboardData() {
 
   try {
     const response = await fetch("./data/data.json");
-    if (!response.ok) throw new Error("Impossible de charger les données");
+    if (!response.ok) throw new Error("Impossible de charger data/data.json");
     
     const data = await response.json();
     const animelist = data.animelist || [];
@@ -14,7 +14,7 @@ async function loadDashboardData() {
 
     statusDiv.textContent = "";
 
-    // 1. Calculer les statistiques
+    // 1. Calculer les statistiques (dont la durée)
     computeStats(animelist);
 
     // 2. Générer les graphiques Chart.js
@@ -25,7 +25,7 @@ async function loadDashboardData() {
     renderAnimeCards(animelist);
 
   } catch (err) {
-    statusDiv.textContent = "Erreur de chargement. Vérifie que le fichier data/data.json est bien généré.";
+    statusDiv.textContent = "Erreur de chargement. Les données sont en cours d'initialisation par GitHub Actions...";
     console.error(err);
   }
 }
@@ -34,19 +34,33 @@ function computeStats(list) {
   let totalEps = 0;
   let totalScore = 0;
   let scoredCount = 0;
+  let totalSeconds = 0;
 
   list.forEach(item => {
     const status = item.list_status;
-    totalEps += status.num_episodes_watched || 0;
+    const watchedEps = status.num_episodes_watched || 0;
     
+    totalEps += watchedEps;
+    
+    // Durée moyenne d'un épisode renvoyée par MAL (en sec) ou 24 min par défaut
+    const epDurationSeconds = item.node.average_episode_duration || (24 * 60);
+    totalSeconds += watchedEps * epDurationSeconds;
+
     if (status.score > 0) {
       totalScore += status.score;
       scoredCount++;
     }
   });
 
+  // Convertit secondes en Jours et Heures
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const days = Math.floor(totalMinutes / (24 * 60));
+  const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+
+  // Mises à jour des éléments HTML
   document.getElementById("totalAnime").textContent = list.length;
   document.getElementById("totalEps").textContent = totalEps;
+  document.getElementById("totalTime").textContent = `${days}j ${hours}h`;
   document.getElementById("meanScore").textContent = scoredCount > 0 ? (totalScore / scoredCount).toFixed(2) + " / 10" : "N/A";
 }
 
@@ -88,7 +102,7 @@ function renderGenreChart(list) {
     });
   });
 
-  // Trier les genres par nombre
+  // Tri pour garder les 5 meilleurs genres
   const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   const ctx = document.getElementById('genreChart').getContext('2d');
@@ -115,9 +129,14 @@ function renderGenreChart(list) {
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
   
+  if (items.length === 0) {
+    resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé.</p>";
+    return;
+  }
+
   resultsGrid.innerHTML = items.map(item => {
     const anime = item.node;
-    const userScore = item.list_status.score ? `Note: ${item.list_status.score}/10` : "Non noté";
+    const userScore = item.list_status.score ? `★ ${item.list_status.score}/10` : "Non noté";
     const epsWatched = `${item.list_status.num_episodes_watched} eps vus`;
     const imgUrl = anime.main_picture ? anime.main_picture.medium : "";
 
