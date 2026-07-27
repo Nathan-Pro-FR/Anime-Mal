@@ -1,35 +1,124 @@
-let allAnime = [];
-
-async function loadAnimeData() {
+async function loadDashboardData() {
   const statusDiv = document.getElementById("status");
 
   try {
     const response = await fetch("./data/data.json");
-    if (!response.ok) throw new Error("Fichier data.json non trouvé dans /data");
+    if (!response.ok) throw new Error("Impossible de charger les données");
     
     const data = await response.json();
-    allAnime = data.top_airing || [];
+    const animelist = data.animelist || [];
     
+    if (data.username) {
+      document.getElementById("userSub").textContent = `Profil MyAnimeList de ${data.username}`;
+    }
+
     statusDiv.textContent = "";
-    renderAnimeCards(allAnime);
+
+    // 1. Calculer les statistiques
+    computeStats(animelist);
+
+    // 2. Générer les graphiques Chart.js
+    renderStatusChart(animelist);
+    renderGenreChart(animelist);
+
+    // 3. Afficher la liste
+    renderAnimeCards(animelist);
+
   } catch (err) {
-    statusDiv.textContent = "Les données sont en cours d'initialisation par GitHub Actions...";
+    statusDiv.textContent = "Erreur de chargement. Vérifie que le fichier data/data.json est bien généré.";
     console.error(err);
   }
+}
+
+function computeStats(list) {
+  let totalEps = 0;
+  let totalScore = 0;
+  let scoredCount = 0;
+
+  list.forEach(item => {
+    const status = item.list_status;
+    totalEps += status.num_episodes_watched || 0;
+    
+    if (status.score > 0) {
+      totalScore += status.score;
+      scoredCount++;
+    }
+  });
+
+  document.getElementById("totalAnime").textContent = list.length;
+  document.getElementById("totalEps").textContent = totalEps;
+  document.getElementById("meanScore").textContent = scoredCount > 0 ? (totalScore / scoredCount).toFixed(2) + " / 10" : "N/A";
+}
+
+function renderStatusChart(list) {
+  const statusCounts = { watching: 0, completed: 0, on_hold: 0, dropped: 0, plan_to_watch: 0 };
+
+  list.forEach(item => {
+    const s = item.list_status.status;
+    if (statusCounts[s] !== undefined) statusCounts[s]++;
+  });
+
+  const ctx = document.getElementById('statusChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['En cours', 'Terminé', 'En pause', 'Abandonné', 'À voir'],
+      datasets: [{
+        data: [
+          statusCounts.watching,
+          statusCounts.completed,
+          statusCounts.on_hold,
+          statusCounts.dropped,
+          statusCounts.plan_to_watch
+        ],
+        backgroundColor: ['#00f0ff', '#ff007f', '#ffd700', '#ff4d4d', '#a0aec0']
+      }]
+    },
+    options: { plugins: { legend: { labels: { color: '#e2e8f0' } } } }
+  });
+}
+
+function renderGenreChart(list) {
+  const genreCounts = {};
+
+  list.forEach(item => {
+    const genres = item.node.genres || [];
+    genres.forEach(g => {
+      genreCounts[g.name] = (genreCounts[g.name] || 0) + 1;
+    });
+  });
+
+  // Trier les genres par nombre
+  const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+  const ctx = document.getElementById('genreChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sortedGenres.map(g => g[0]),
+      datasets: [{
+        label: "Nombre d'animes",
+        data: sortedGenres.map(g => g[1]),
+        backgroundColor: '#00f0ff'
+      }]
+    },
+    options: {
+      scales: {
+        y: { ticks: { color: '#e2e8f0' } },
+        x: { ticks: { color: '#e2e8f0' } }
+      },
+      plugins: { legend: { labels: { color: '#e2e8f0' } } }
+    }
+  });
 }
 
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
   
-  if (items.length === 0) {
-    resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé.</p>";
-    return;
-  }
-
   resultsGrid.innerHTML = items.map(item => {
     const anime = item.node;
-    const score = anime.mean ? `★ ${anime.mean}` : "N/A";
-    const eps = anime.num_episodes ? `${anime.num_episodes} eps` : "? eps";
+    const userScore = item.list_status.score ? `Note: ${item.list_status.score}/10` : "Non noté";
+    const epsWatched = `${item.list_status.num_episodes_watched} eps vus`;
     const imgUrl = anime.main_picture ? anime.main_picture.medium : "";
 
     return `
@@ -38,8 +127,8 @@ function renderAnimeCards(items) {
         <div class="card-info">
           <div class="card-title">${anime.title}</div>
           <div class="card-meta">
-            <span class="score">${score}</span>
-            <span>${eps}</span>
+            <span class="score">${userScore}</span>
+            <span>${epsWatched}</span>
           </div>
         </div>
       </div>
@@ -47,13 +136,4 @@ function renderAnimeCards(items) {
   }).join("");
 }
 
-// Filtrage instantané
-document.getElementById("filterInput").addEventListener("input", (e) => {
-  const query = e.target.value.toLowerCase();
-  const filtered = allAnime.filter(item => 
-    item.node.title.toLowerCase().includes(query)
-  );
-  renderAnimeCards(filtered);
-});
-
-document.addEventListener("DOMContentLoaded", loadAnimeData);
+document.addEventListener("DOMContentLoaded", loadDashboardData);
