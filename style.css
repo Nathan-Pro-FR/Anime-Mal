@@ -169,3 +169,56 @@ header p {
   color: var(--accent-cyan);
   font-weight: 600;
 }
+
+/* Style Section Gemini IA */
+.ai-section {
+  margin-bottom: 3rem;
+}
+
+.ai-card {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+.ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ai-header h2 {
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+}
+
+.ai-header button {
+  background: var(--accent-magenta);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ai-header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
+}
+
+.ai-result {
+  color: var(--text-main);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  white-space: pre-wrap;
+}
