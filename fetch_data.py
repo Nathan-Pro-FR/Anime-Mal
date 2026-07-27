@@ -3,30 +3,37 @@ import json
 import requests
 
 CLIENT_ID = os.environ.get("MAL_CLIENT_ID")
+# Remplace par ton pseudo MyAnimeList exact
+USERNAME = "TON_PSEUDO_MAL" 
+
 BASE_URL = "https://api.myanimelist.net/v2"
+HEADERS = {"X-MAL-CLIENT-ID": CLIENT_ID}
 
-headers = {
-    "X-MAL-CLIENT-ID": CLIENT_ID
-}
-
-def get_top_anime():
-    url = f"{BASE_URL}/anime/ranking?ranking_type=airing&limit=24&fields=id,title,main_picture,mean,num_episodes,genres"
-    res = requests.get(url, headers=headers)
-    if res.status_code == 200:
-        return res.json().get("data", [])
-    print(f"Erreur API: {res.status_code}")
-    return []
-
-if __name__ == "__main__":
-    data = {
-        "top_airing": get_top_anime()
+def get_user_animelist(username):
+    url = f"{BASE_URL}/users/{username}/animelist"
+    params = {
+        "limit": 1000,
+        "fields": "list_status,num_episodes,genres,mean,main_picture",
+        "sort": "list_score"
     }
     
-    # Crée le dossier 'data' s'il n'existe pas encore
-    os.makedirs("data", exist_ok=True)
+    response = requests.get(url, headers=HEADERS, params=params)
+    if response.status_code == 200:
+        return response.json().get("data", [])
+    else:
+        print(f"Erreur API ({response.status_code}): {response.text}")
+        return []
+
+if __name__ == "__main__":
+    animelist = get_user_animelist(USERNAME)
     
-    # Sauvegarde dans data/data.json
+    data = {
+        "username": USERNAME,
+        "animelist": animelist
+    }
+    
+    os.makedirs("data", exist_ok=True)
     with open("data/data.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         
-    print("Fichier data/data.json généré avec succès !")
+    print(f"Données de {USERNAME} récupérées ({len(animelist)} animes) !")
