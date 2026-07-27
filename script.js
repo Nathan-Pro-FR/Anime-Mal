@@ -14,18 +14,19 @@ async function loadDashboardData() {
 
     statusDiv.textContent = "";
 
-    // 1. Calculer les statistiques (dont la durée)
+    // 1. Calculer les statistiques (temps en j/h/m & statuts)
     computeStats(animelist);
 
-    // 2. Générer les graphiques Chart.js
+    // 2. Générer les 3 graphiques Chart.js
     renderStatusChart(animelist);
     renderGenreChart(animelist);
+    renderFormatChart(animelist);
 
-    // 3. Afficher la liste
+    // 3. Afficher les cartes d'animes
     renderAnimeCards(animelist);
 
   } catch (err) {
-    statusDiv.textContent = "Erreur de chargement. Les données sont en cours d'initialisation par GitHub Actions...";
+    statusDiv.textContent = "Erreur de chargement des données. Vérifie que data/data.json existe.";
     console.error(err);
   }
 }
@@ -35,6 +36,8 @@ function computeStats(list) {
   let totalScore = 0;
   let scoredCount = 0;
   let totalSeconds = 0;
+  let completedCount = 0;
+  let watchingCount = 0;
 
   list.forEach(item => {
     const status = item.list_status;
@@ -42,7 +45,11 @@ function computeStats(list) {
     
     totalEps += watchedEps;
     
-    // Durée moyenne d'un épisode renvoyée par MAL (en sec) ou 24 min par défaut
+    // Compter les statuts
+    if (status.status === "completed") completedCount++;
+    if (status.status === "watching") watchingCount++;
+
+    // Calcul de la durée (secondes)
     const epDurationSeconds = item.node.average_episode_duration || (24 * 60);
     totalSeconds += watchedEps * epDurationSeconds;
 
@@ -52,15 +59,18 @@ function computeStats(list) {
     }
   });
 
-  // Convertit secondes en Jours et Heures
+  // Convertit les secondes en Jours, Heures ET Minutes
   const totalMinutes = Math.floor(totalSeconds / 60);
   const days = Math.floor(totalMinutes / (24 * 60));
   const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+  const minutes = totalMinutes % 60;
 
-  // Mises à jour des éléments HTML
+  // Mise à jour de l'affichage HTML
   document.getElementById("totalAnime").textContent = list.length;
+  document.getElementById("completedAnime").textContent = completedCount;
+  document.getElementById("watchingAnime").textContent = watchingCount;
   document.getElementById("totalEps").textContent = totalEps;
-  document.getElementById("totalTime").textContent = `${days}j ${hours}h`;
+  document.getElementById("totalTime").textContent = `${days}j ${hours}h ${minutes}m`;
   document.getElementById("meanScore").textContent = scoredCount > 0 ? (totalScore / scoredCount).toFixed(2) + " / 10" : "N/A";
 }
 
@@ -102,7 +112,6 @@ function renderGenreChart(list) {
     });
   });
 
-  // Tri pour garder les 5 meilleurs genres
   const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   const ctx = document.getElementById('genreChart').getContext('2d');
@@ -126,6 +135,31 @@ function renderGenreChart(list) {
   });
 }
 
+function renderFormatChart(list) {
+  const formatCounts = {};
+
+  list.forEach(item => {
+    const format = (item.node.media_type || "Inconnu").toUpperCase();
+    formatCounts[format] = (formatCounts[format] || 0) + 1;
+  });
+
+  const ctx = document.getElementById('formatChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'polarArea',
+    data: {
+      labels: Object.keys(formatCounts),
+      datasets: [{
+        data: Object.values(formatCounts),
+        backgroundColor: ['#00f0ff', '#ff007f', '#ffd700', '#00ff88', '#9900ff', '#ff9900']
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: '#e2e8f0' } } },
+      scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false } } }
+    }
+  });
+}
+
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
   
@@ -138,12 +172,14 @@ function renderAnimeCards(items) {
     const anime = item.node;
     const userScore = item.list_status.score ? `★ ${item.list_status.score}/10` : "Non noté";
     const epsWatched = `${item.list_status.num_episodes_watched} eps vus`;
+    const format = anime.media_type ? anime.media_type.toUpperCase() : "TV";
     const imgUrl = anime.main_picture ? anime.main_picture.medium : "";
 
     return `
       <div class="card">
         <img src="${imgUrl}" alt="${anime.title}">
         <div class="card-info">
+          <div class="card-type">${format}</div>
           <div class="card-title">${anime.title}</div>
           <div class="card-meta">
             <span class="score">${userScore}</span>

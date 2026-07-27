@@ -3,7 +3,7 @@ import json
 import requests
 
 CLIENT_ID = os.environ.get("MAL_CLIENT_ID")
-USERNAME = "Neku_lax"  # <-- Mets ton pseudo MAL ici
+USERNAME = "TON_PSEUDO_MAL"  # <-- Mets ton pseudo MAL ici
 
 BASE_URL = "https://api.myanimelist.net/v2"
 HEADERS = {"X-MAL-CLIENT-ID": CLIENT_ID}
@@ -12,7 +12,7 @@ def get_user_animelist(username):
     url = f"{BASE_URL}/users/{username}/animelist"
     params = {
         "limit": 1000,
-        "fields": "list_status,num_episodes,genres,mean,main_picture,average_episode_duration",
+        "fields": "list_status,num_episodes,genres,mean,main_picture,average_episode_duration,media_type,start_season",
         "sort": "list_score"
     }
     
@@ -31,7 +31,6 @@ if __name__ == "__main__":
         "animelist": animelist
     }
     
-    # Création du dossier /data s'il n'existe pas
     os.makedirs("data", exist_ok=True)
     
     with open("data/data.json", "w", encoding="utf-8") as f:
