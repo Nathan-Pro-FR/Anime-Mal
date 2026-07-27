@@ -3,24 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAL Explorer</title>
+  <title>Mon MAL Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Chart.js pour les graphiques -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <div class="container">
     <header>
-      <h1>MAL<span>Explorer</span></h1>
-      <p>Top Animes de la saison en direct de MyAnimeList</p>
+      <h1>MAL<span>Dashboard</span></h1>
+      <p id="userSub">Statistiques de ton compte MyAnimeList</p>
     </header>
 
-    <section class="search-bar">
-      <input type="text" id="filterInput" placeholder="Filtrer les animes affichés...">
+    <!-- Cartes de Chiffres Clés -->
+    <section class="stats-cards">
+      <div class="stat-card">
+        <span class="stat-value" id="totalAnime">0</span>
+        <span class="stat-label">Animes Totaux</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="totalEps">0</span>
+        <span class="stat-label">Épisodes Vu(s)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="meanScore">0</span>
+        <span class="stat-label">Note Moyenne</span>
+      </div>
     </section>
 
-    <div id="status" class="status">Chargement des données...</div>
+    <!-- Section Graphiques -->
+    <section class="charts-section">
+      <div class="chart-container">
+        <h3>Répartition des Statuts</h3>
+        <canvas id="statusChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Top Genres Préférés</h3>
+        <canvas id="genreChart"></canvas>
+      </div>
+    </section>
 
+    <div id="status" class="status">Chargement de tes données...</div>
+
+    <!-- Grille d'animes -->
     <main id="resultsGrid" class="grid"></main>
   </div>
 
