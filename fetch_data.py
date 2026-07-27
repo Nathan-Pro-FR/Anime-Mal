@@ -4,7 +4,7 @@ import requests
 
 CLIENT_ID = os.environ.get("MAL_CLIENT_ID")
 # Remplace par ton pseudo MyAnimeList exact
-USERNAME = "TON_PSEUDO_MAL" 
+USERNAME = "Neku_lax" 
 
 BASE_URL = "https://api.myanimelist.net/v2"
 HEADERS = {"X-MAL-CLIENT-ID": CLIENT_ID}
