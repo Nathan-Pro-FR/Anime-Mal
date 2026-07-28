@@ -309,7 +309,7 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
 `;
 
     // 4. Appel de l'API Gemini 1.5 Flash (Gratuite et ultra rapide)
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
