@@ -264,7 +264,7 @@ function renderAnimeCards(items) {
   }).join("");
 }
 
-// --- FONCTIONS INTEGRATION IA GEMINI ---
+// --- FONCTION INTEGRATION IA GEMINI ---
 
 async function runGeminiAnalysis() {
   const resultDiv = document.getElementById("aiResult");
@@ -282,35 +282,52 @@ async function runGeminiAnalysis() {
   btn.disabled = true;
 
   try {
-    // 2. Charger les données du fichier local
+    // 2. Charger les données du fichier JSON local
     const dataResp = await fetch("./data/data.json");
     if (!dataResp.ok) throw new Error("Impossible de lire data/data.json");
 
     const data = await dataResp.json();
     const animelist = data.animelist || [];
 
-    // Formater le résumé pour le prompt
+    // Formater le résumé avec un dictionnaire explicatif clair
     const userSummary = animelist.map(item => {
-      return `- ${item.node.title} | Note: ${item.list_status.score || 'Non noté'}/10 | Statut: ${item.list_status.status}`;
+      const title = item.node.title;
+      const score = item.list_status.score > 0 ? `${item.list_status.score}/10` : 'Non noté (score 0)';
+      const status = item.list_status.status;
+      const episodesWatched = item.list_status.num_episodes_watched || 0;
+
+      return `- Titre: "${title}" | Note attribuée: ${score} | Statut d'avancement: ${status} | Épisodes vus: ${episodesWatched}`;
     }).join("\n");
 
     const promptText = `
-Voici la liste d'animes consultés et notés par l'utilisateur "${data.username || 'Otaku'}":
+Voici la liste des animes enregistrés par l'utilisateur "${data.username || 'Otaku'}".
 
+--- EXPLICATION DES DONNÉES DU FICHIER ---
+- "Statut d'avancement" :
+  • "completed" = Anime terminé.
+  • "watching" = Anime en cours de visionnage.
+  • "on_hold" = Anime mis en pause.
+  • "dropped" = Anime abandonné en cours de route.
+  • "plan_to_watch" = Anime prévu à voir (pas encore commencé).
+- "Note attribuée" : Note sur 10. Si "Non noté", l'utilisateur ne lui a pas encore donné de note.
+------------------------------------------
+
+DONNÉES DE L'UTILISATEUR :
 ${userSummary}
 
-En te basant sur ses notes et ses choix, fais une analyse amusante, précise et pertinente de son profil en suivant exactement ces 4 points :
+INSTRUCTIONS DE L'ANALYSE :
+En te basant sur ces choix, réalise une analyse complète de son profil otaku en 4 points :
 
-1. 🎯 **Ce qu'il aime particulièrement** (Thèmes, genres, styles d'animes qui ressortent de ses bonnes notes).
-2. 🚫 **Ce qu'il n'aime pas ou évite** (D'après ses mauvaises notes, animes abandonnés ou absents).
-3. 👤 **Le Personnage d'Anime qui lui ressemble le plus** (Choisis un personnage célèbre et explique avec humour et précision pourquoi sa personnalité/ses goûts collent avec ce profil).
-4. 🍿 **3 Recommandations Sur-Mesure** (Animes qu'il n'a PAS encore vus dans sa liste, avec 1 phrase d'explication personnalisée pour chaque).
+1. 🎯 **Ce qu'il aime particulièrement** : Analyse les animes avec de hautes notes ou le statut "completed" (thèmes, genres, styles).
+2. 🚫 **Ce qu'il n'aime pas ou évite** : Repère les animes avec de basses notes, ceux au statut "dropped" (abandonnés), ou les genres absents.
+3. 👤 **Son Personnage Totem** : Choisis un personnage célèbre d'anime qui correspond parfaitement à sa personnalité de spectateur / ses goûts, et explique pourquoi avec humour.
+4. 🍿 **3 Recommandations Sur-Mesure** : Propose 3 animes qu'il n'a PAS encore vus dans sa liste, avec 1 phrase explicative personnalisée pour chaque.
 
-Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
+Sois dynamique, drôle, et utilise des emojis !
 `;
 
-    // 3. Requête HTTP REST conforme à l'API Gemini 2.5 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // 3. Appel à l'API Gemini 1.5 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -332,14 +349,14 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
       throw new Error(resData.error.message || "Erreur de l'API Gemini");
     }
 
-    // Affichage de la réponse
+    // Affichage de la réponse formatée
     const aiAnswer = resData.candidates[0].content.parts[0].text;
     resultDiv.innerHTML = formatMarkdownText(aiAnswer);
 
   } catch (err) {
     console.error(err);
     resultDiv.textContent = "❌ Erreur : " + err.message;
-    // Si la clé est invalide ou expirée, on la supprime pour pouvoir la demander à nouveau
+    // Si la clé est mauvaise, on la supprime pour pouvoir la saisir de nouveau
     if (err.message.includes("API key") || err.message.includes("400") || err.message.includes("404")) {
       localStorage.removeItem("GEMINI_API_KEY");
     }
@@ -348,7 +365,7 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
   }
 }
 
-// Fonction pour convertir le Markdown basique en HTML propre
+// Fonction utilitaire pour formater le texte Markdown en HTML basique
 function formatMarkdownText(text) {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
