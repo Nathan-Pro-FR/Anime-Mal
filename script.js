@@ -383,5 +383,118 @@ function formatMarkdownText(text) {
     // Retours à la ligne
     .replace(/\n/g, '<br>');
 }
+// --- FONCTION EXPORT PDF : ANALYSE GEMINI SEULE ---
+async function exportAiAnalysisToPDF() {
+  const element = document.getElementById("aiResult");
+  const btn = document.getElementById("exportAiPdfBtn");
+
+  if (!element || element.innerText.trim() === "") {
+    alert("Génère d'abord l'analyse Gemini avant de l'exporter !");
+    return;
+  }
+
+  const originalText = btn ? btn.textContent : "";
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ Génération du PDF...";
+  }
+
+  try {
+    // Capture de la div d'analyse avec un fond sombre/propre
+    const canvas = await html2canvas(element, {
+      scale: 2, // Haute résolution
+      backgroundColor: "#0d1117", // Ajuste selon ton fond si besoin
+      useCORS: true
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pdfWidth - 20; // Marges de 10mm à gauche/droite
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 10;
+
+    // Première page
+    pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+    heightLeft -= (pdfHeight - 20);
+
+    // Gestion de la découpe si l'analyse s'étend sur plusieurs pages
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight + 10;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= (pdfHeight - 20);
+    }
+
+    pdf.save("Analyse_Otaku_Gemini.pdf");
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de la création du PDF : " + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  }
+}
+
+// --- FONCTION EXPORT PDF : DASHBOARD COMPLET ---
+async function exportFullDashboardToPDF() {
+  // On cible le conteneur principal de ton dashboard (ex: un <main> ou une div avec id="dashboard")
+  const element = document.getElementById("dashboardContainer") || document.body;
+  const btn = document.getElementById("exportDashboardPdfBtn");
+
+  const originalText = btn ? btn.textContent : "";
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ Capture du Dashboard...";
+  }
+
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      backgroundColor: "#0b0e14", // Fond principal de ton thème
+      useCORS: true,
+      logging: false
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pdfWidth - 10; 
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 5;
+
+    pdf.addImage(imgData, "PNG", 5, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 5, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+
+    pdf.save("Mon_Dashboard_Anime.pdf");
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l'export du Dashboard : " + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  }
+}
 
 document.addEventListener("DOMContentLoaded", loadDashboardData);
