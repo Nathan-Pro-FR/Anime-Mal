@@ -14,10 +14,10 @@ async function loadDashboardData() {
     // 2. Charger les données MyAnimeList
     const dataResp = await fetch("./data/data.json");
     if (!dataResp.ok) throw new Error("Impossible de charger data/data.json");
-    
+
     const data = await dataResp.json();
     const animelist = data.animelist || [];
-    
+
     if (data.username) {
       document.getElementById("userSub").textContent = `Profil MyAnimeList de ${data.username}`;
     }
@@ -61,9 +61,9 @@ function computeStats(list) {
   list.forEach(item => {
     const status = item.list_status;
     const watchedEps = status.num_episodes_watched || 0;
-    
+
     totalEps += watchedEps;
-    
+
     if (status.status === "completed") completedCount++;
     if (status.status === "watching") watchingCount++;
 
@@ -207,7 +207,7 @@ function renderFormatChart(list) {
 
   const labels = Object.keys(formatCounts).map(fmt => fmt.toUpperCase());
   const dataValues = Object.values(formatCounts);
-  
+
   const colors = Object.keys(formatCounts).map(fmt => {
     return userFormatColors[fmt] || defaultFormatColors[fmt] || defaultFormatColors.other;
   });
@@ -234,7 +234,7 @@ function renderFormatChart(list) {
 // Rendu de la grille des cartes d'animes
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
-  
+
   if (items.length === 0) {
     resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé dans votre liste.</p>";
     return;
@@ -308,7 +308,7 @@ En te basant sur ses notes et ses choix, fais une analyse amusante, précise et 
 Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
 `;
 
-    // 4. Appel de l'API avec le modèle 'gemini-2.5-flash'
+    // 4. Appel de l'API Gemini 2.5 Flash
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -320,7 +320,7 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
     const resData = await response.json();
 
     if (resData.error) {
-      throw new Error(resData.error.message || "Erreur de l'API Gemini");
+      throw new Error(resData.error.message || "Erreur de la clé API");
     }
 
     const aiAnswer = resData.candidates[0].content.parts[0].text;
@@ -329,14 +329,14 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
   } catch (err) {
     console.error(err);
     resultDiv.textContent = "❌ Erreur lors de l'analyse : " + err.message + ". Assure-toi que ta clé API Gemini est valide.";
-    // Réinitialise la clé si l'appel échoue pour pouvoir la ressaisir au besoin
+    // Permet de réinitialiser la clé si elle était mauvaise
     localStorage.removeItem("GEMINI_API_KEY");
   } finally {
     btn.disabled = false;
   }
 }
 
-// Fonction pour formater le Markdown renvoyé par Gemini en HTML
+// Fonction pour convertir le Markdown basique en HTML propre
 function formatMarkdownText(text) {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
