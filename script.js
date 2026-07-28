@@ -266,7 +266,6 @@ function renderAnimeCards(items) {
 
 // --- FONCTIONS INTEGRATION IA GEMINI ---
 
-// Fonction principale pour appeler l'API Google Gemini
 async function runGeminiAnalysis() {
   const resultDiv = document.getElementById("aiResult");
   const btn = document.getElementById("geminiBtn");
@@ -283,17 +282,18 @@ async function runGeminiAnalysis() {
   btn.disabled = true;
 
   try {
-    // 2. Charger les données si elles ne sont pas déjà en mémoire
+    // 2. Charger les données du fichier local
     const dataResp = await fetch("./data/data.json");
+    if (!dataResp.ok) throw new Error("Impossible de lire data/data.json");
+
     const data = await dataResp.json();
     const animelist = data.animelist || [];
 
-    // Formater un résumé épuré de la liste pour ne pas surcharger le prompt
+    // Formater le résumé pour le prompt
     const userSummary = animelist.map(item => {
       return `- ${item.node.title} | Note: ${item.list_status.score || 'Non noté'}/10 | Statut: ${item.list_status.status}`;
     }).join("\n");
 
-    // 3. Préparer le Prompt Gemini
     const promptText = `
 Voici la liste d'animes consultés et notés par l'utilisateur "${data.username || 'Otaku'}":
 
@@ -309,28 +309,40 @@ En te basant sur ses notes et ses choix, fais une analyse amusante, précise et 
 Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
 `;
 
-    // 4. Appel de l'API Gemini 2.5 Flash
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+    // 3. Requête HTTP REST conforme à l'API Gemini 2.5 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: promptText }] }]
+        contents: [
+          {
+            parts: [{ text: promptText }]
+          }
+        ]
       })
     });
 
     const resData = await response.json();
 
     if (resData.error) {
-      throw new Error(resData.error.message || "Erreur de la clé API");
+      throw new Error(resData.error.message || "Erreur de l'API Gemini");
     }
 
+    // Affichage de la réponse
     const aiAnswer = resData.candidates[0].content.parts[0].text;
     resultDiv.innerHTML = formatMarkdownText(aiAnswer);
 
   } catch (err) {
     console.error(err);
-    resultDiv.textContent = "❌ Erreur lors de l'analyse : " + err.message + ". Assure-toi que ta clé API Gemini est valide.";
-    localStorage.removeItem("GEMINI_API_KEY");
+    resultDiv.textContent = "❌ Erreur : " + err.message;
+    // Si la clé est invalide ou expirée, on la supprime pour pouvoir la demander à nouveau
+    if (err.message.includes("API key") || err.message.includes("400") || err.message.includes("404")) {
+      localStorage.removeItem("GEMINI_API_KEY");
+    }
   } finally {
     btn.disabled = false;
   }
