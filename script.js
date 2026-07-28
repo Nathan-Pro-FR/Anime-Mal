@@ -368,8 +368,19 @@ Sois dynamique, drôle, et utilise des emojis !
 // Fonction utilitaire pour formater le texte Markdown en HTML basique
 function formatMarkdownText(text) {
   return text
+    // Nettoyage des règles horizontales (---)
+    .replace(/^---$/gm, '<hr style="border: 0; height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0;">')
+    // Titres (### Titre)
+    .replace(/^### (.*$)/gm, '<h3 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 8px;">$1</h3>')
+    // Citations (> texte)
+    .replace(/^> (.*$)/gm, '<blockquote style="border-left: 3px solid var(--accent-magenta); margin: 8px 0; padding-left: 12px; opacity: 0.9; font-style: italic;">$1</blockquote>')
+    // Gras (**texte**)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^\*\s(.*)$/gm, '• $1')
+    // Italique (*texte*)
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Puces (* élément ou - élément)
+    .replace(/^[\*\-] (.*)$/gm, '• $1')
+    // Retours à la ligne
     .replace(/\n/g, '<br>');
 }
 
