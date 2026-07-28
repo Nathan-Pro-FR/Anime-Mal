@@ -8,13 +8,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <!-- Chart.js pour les graphiques -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Bibliothèques pour l'export PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <header>
-      <h1>MAL<span>Dashboard</span></h1>
-      <p id="userSub">Statistiques de ton compte MyAnimeList</p>
+  
+  <div class="container" id="dashboardContainer">
+    <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <h1>MAL<span>Dashboard</span></h1>
+        <p id="userSub">Statistiques de ton compte MyAnimeList</p>
+      </div>
+      <!-- BOUTON 1 : Export du Dashboard Complet (Placé dans le Header) -->
+      <button id="exportDashboardPdfBtn" onclick="exportFullDashboardToPDF()" class="btn-export">
+        📊 Exporter le Dashboard en PDF
+      </button>
     </header>
 
     <!-- Cartes de Chiffres Clés -->
