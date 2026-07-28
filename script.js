@@ -326,8 +326,8 @@ En te basant sur ces choix, réalise une analyse complète de son profil otaku e
 Sois dynamique, drôle, et utilise des emojis !
 `;
 
-    // 3. Appel à l'API Gemini 1.5 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // 3. Appel à l'API Gemini 3.6 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
