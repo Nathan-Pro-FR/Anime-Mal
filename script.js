@@ -289,7 +289,7 @@ async function runGeminiAnalysis() {
     const data = await dataResp.json();
     const animelist = data.animelist || [];
 
-    // Formater le résumé avec un dictionnaire explicatif clair
+    // Formater le résumé
     const userSummary = animelist.map(item => {
       const title = item.node.title;
       const score = item.list_status.score > 0 ? `${item.list_status.score}/10` : 'Non noté (score 0)';
@@ -321,7 +321,7 @@ En te basant sur ces choix, réalise une analyse complète de son profil otaku e
 1. 🎯 **Ce qu'il aime particulièrement** : Analyse les animes avec de hautes notes ou le statut "completed" (thèmes, genres, styles).
 2. 🚫 **Ce qu'il n'aime pas ou évite** : Repère les animes avec de basses notes, ceux au statut "dropped" (abandonnés), ou les genres absents.
 3. 👤 **Son Personnage Totem** : Choisis un personnage célèbre d'anime qui correspond parfaitement à sa personnalité de spectateur / ses goûts, et explique pourquoi avec humour.
-4. 🍿 **3 Recommandations Sur-Mesure** : Propose 3 animes qu'il n'a PAS encore vus dans sa liste, avec 1 phrase explicative personnalisée pour chaque.
+4. 🍿 **3 Recommandations Sur-Mesure** : Propose 3 animes qu'il n'a PAS encore vus dans sa liste, avec 1 sentence explicative personnalisée pour chaque.
 
 Sois dynamique, drôle, et utilise des emojis !
 `;
@@ -356,7 +356,7 @@ Sois dynamique, drôle, et utilise des emojis !
   } catch (err) {
     console.error(err);
     resultDiv.textContent = "❌ Erreur : " + err.message;
-    // Si la clé est mauvaise, on la supprime pour pouvoir la saisir de nouveau
+    // Si la clé est mauvaise ou le modèle introuvable, on réinitialise la clé
     if (err.message.includes("API key") || err.message.includes("400") || err.message.includes("404")) {
       localStorage.removeItem("GEMINI_API_KEY");
     }
@@ -368,27 +368,21 @@ Sois dynamique, drôle, et utilise des emojis !
 // Fonction utilitaire pour formater le texte Markdown en HTML basique
 function formatMarkdownText(text) {
   return text
-    // Nettoyage des règles horizontales (---)
     .replace(/^---$/gm, '<hr style="border: 0; height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0;">')
-    // Titres (### Titre)
     .replace(/^### (.*$)/gm, '<h3 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 8px;">$1</h3>')
-    // Citations (> texte)
     .replace(/^> (.*$)/gm, '<blockquote style="border-left: 3px solid var(--accent-magenta); margin: 8px 0; padding-left: 12px; opacity: 0.9; font-style: italic;">$1</blockquote>')
-    // Gras (**texte**)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italique (*texte*)
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    // Puces (* élément ou - élément)
     .replace(/^[\*\-] (.*)$/gm, '• $1')
-    // Retours à la ligne
     .replace(/\n/g, '<br>');
 }
+
 // --- FONCTION EXPORT PDF : ANALYSE GEMINI SEULE ---
 async function exportAiAnalysisToPDF() {
   const element = document.getElementById("aiResult");
   const btn = document.getElementById("exportAiPdfBtn");
 
-  if (!element || element.innerText.trim() === "") {
+  if (!element || element.innerText.trim() === "" || element.innerText.includes("Clique sur le bouton")) {
     alert("Génère d'abord l'analyse Gemini avant de l'exporter !");
     return;
   }
@@ -396,14 +390,13 @@ async function exportAiAnalysisToPDF() {
   const originalText = btn ? btn.textContent : "";
   if (btn) {
     btn.disabled = true;
-    btn.textContent = "⏳ Génération du PDF...";
+    btn.textContent = "⏳ Génération...";
   }
 
   try {
-    // Capture de la div d'analyse avec un fond sombre/propre
     const canvas = await html2canvas(element, {
-      scale: 2, // Haute résolution
-      backgroundColor: "#0d1117", // Ajuste selon ton fond si besoin
+      scale: 2,
+      backgroundColor: "#151922",
       useCORS: true
     });
 
@@ -413,17 +406,15 @@ async function exportAiAnalysisToPDF() {
 
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pdfWidth - 20; // Marges de 10mm à gauche/droite
+    const imgWidth = pdfWidth - 20;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     let heightLeft = imgHeight;
     let position = 10;
 
-    // Première page
     pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
     heightLeft -= (pdfHeight - 20);
 
-    // Gestion de la découpe si l'analyse s'étend sur plusieurs pages
     while (heightLeft > 0) {
       position = heightLeft - imgHeight + 10;
       pdf.addPage();
@@ -445,7 +436,6 @@ async function exportAiAnalysisToPDF() {
 
 // --- FONCTION EXPORT PDF : DASHBOARD COMPLET ---
 async function exportFullDashboardToPDF() {
-  // On cible le conteneur principal de ton dashboard (ex: un <main> ou une div avec id="dashboard")
   const element = document.getElementById("dashboardContainer") || document.body;
   const btn = document.getElementById("exportDashboardPdfBtn");
 
@@ -458,7 +448,7 @@ async function exportFullDashboardToPDF() {
   try {
     const canvas = await html2canvas(element, {
       scale: 2,
-      backgroundColor: "#0b0e14", // Fond principal de ton thème
+      backgroundColor: "#0b0e14",
       useCORS: true,
       logging: false
     });
@@ -469,7 +459,7 @@ async function exportFullDashboardToPDF() {
 
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pdfWidth - 10; 
+    const imgWidth = pdfWidth - 10;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     let heightLeft = imgHeight;
