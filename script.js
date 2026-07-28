@@ -22,7 +22,7 @@ async function loadDashboardData() {
       document.getElementById("userSub").textContent = `Profil MyAnimeList de ${data.username}`;
     }
 
-    statusDiv.textContent = "";
+    if (statusDiv) statusDiv.textContent = "";
 
     // 3. Calculer les statistiques et générer l'affichage
     computeStats(animelist);
@@ -32,7 +32,7 @@ async function loadDashboardData() {
     renderAnimeCards(animelist);
 
   } catch (err) {
-    statusDiv.textContent = "Erreur de chargement des données. Vérifie la présence de config.json et data/data.json.";
+    if (statusDiv) statusDiv.textContent = "Erreur de chargement des données. Vérifie la présence de config.json et data/data.json.";
     console.error(err);
   }
 }
@@ -234,6 +234,7 @@ function renderFormatChart(list) {
 // Rendu de la grille des cartes d'animes
 function renderAnimeCards(items) {
   const resultsGrid = document.getElementById("resultsGrid");
+  if (!resultsGrid) return;
 
   if (items.length === 0) {
     resultsGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aucun anime trouvé dans votre liste.</p>";
@@ -329,7 +330,6 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
   } catch (err) {
     console.error(err);
     resultDiv.textContent = "❌ Erreur lors de l'analyse : " + err.message + ". Assure-toi que ta clé API Gemini est valide.";
-    // Permet de réinitialiser la clé si elle était mauvaise
     localStorage.removeItem("GEMINI_API_KEY");
   } finally {
     btn.disabled = false;
@@ -340,7 +340,7 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
 function formatMarkdownText(text) {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^\*\s(.*)$/gmf, '• $1')
+    .replace(/^\*\s(.*)$/gm, '• $1')
     .replace(/\n/g, '<br>');
 }
 
