@@ -308,7 +308,7 @@ En te basant sur ses notes et ses choix, fais une analyse amusante, précise et 
 Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
 `;
 
-    // 4. Appel de l'API Gemini 1.5 Flash (Gratuite et ultra rapide)
+    // 4. Appel de l'API avec le modèle 'gemini-2.5-flash'
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -320,7 +320,7 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
     const resData = await response.json();
 
     if (resData.error) {
-      throw new Error(resData.error.message || "Erreur de la clé API");
+      throw new Error(resData.error.message || "Erreur de l'API Gemini");
     }
 
     const aiAnswer = resData.candidates[0].content.parts[0].text;
@@ -329,16 +329,19 @@ Rédige la réponse de manière dynamique, bien mise en page avec des emojis.
   } catch (err) {
     console.error(err);
     resultDiv.textContent = "❌ Erreur lors de l'analyse : " + err.message + ". Assure-toi que ta clé API Gemini est valide.";
-    // Permet de réinitialiser la clé si elle était mauvaise
+    // Réinitialise la clé si l'appel échoue pour pouvoir la ressaisir au besoin
     localStorage.removeItem("GEMINI_API_KEY");
   } finally {
     btn.disabled = false;
   }
 }
 
-// Petite fonction simple pour convertir le gras (**texte**) en <strong> sans grosse librairie
+// Fonction pour formater le Markdown renvoyé par Gemini en HTML
 function formatMarkdownText(text) {
-  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^\*\s(.*)$/gmf, '• $1')
+    .replace(/\n/g, '<br>');
 }
 
 document.addEventListener("DOMContentLoaded", loadDashboardData);
