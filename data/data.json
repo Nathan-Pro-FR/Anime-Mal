@@ -93,8 +93,8 @@
         "id": 53129,
         "title": "Seishun Buta Yarou wa Odekake Sister no Yume wo Minai",
         "main_picture": {
-          "medium": "https://cdn.myanimelist.net/images/anime/1540/134808.webp",
-          "large": "https://cdn.myanimelist.net/images/anime/1540/134808l.webp"
+          "medium": "https://cdn.myanimelist.net/images/anime/1540/134808.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1540/134808l.jpg"
         },
         "num_episodes": 1,
         "genres": [
@@ -323,7 +323,7 @@
             "name": "Parody"
           }
         ],
-        "mean": 6.21,
+        "mean": 6.2,
         "average_episode_duration": 1440,
         "media_type": "tv",
         "start_season": {
