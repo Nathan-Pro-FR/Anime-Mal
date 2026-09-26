@@ -262,8 +262,8 @@
         "id": 62896,
         "title": "Chou Kaguya-hime!",
         "main_picture": {
-          "medium": "https://cdn.myanimelist.net/images/anime/1758/153953.jpg",
-          "large": "https://cdn.myanimelist.net/images/anime/1758/153953l.jpg"
+          "medium": "https://cdn.myanimelist.net/images/anime/1758/153953.webp",
+          "large": "https://cdn.myanimelist.net/images/anime/1758/153953l.webp"
         },
         "num_episodes": 1,
         "genres": [
@@ -288,7 +288,7 @@
             "name": "Supernatural"
           }
         ],
-        "mean": 8.44,
+        "mean": 8.45,
         "average_episode_duration": 8433,
         "media_type": "ona",
         "start_season": {
