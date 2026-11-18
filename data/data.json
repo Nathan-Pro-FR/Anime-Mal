@@ -93,8 +93,8 @@
         "id": 53129,
         "title": "Seishun Buta Yarou wa Odekake Sister no Yume wo Minai",
         "main_picture": {
-          "medium": "https://cdn.myanimelist.net/images/anime/1540/134808.jpg",
-          "large": "https://cdn.myanimelist.net/images/anime/1540/134808l.jpg"
+          "medium": "https://cdn.myanimelist.net/images/anime/1540/134808.webp",
+          "large": "https://cdn.myanimelist.net/images/anime/1540/134808l.webp"
         },
         "num_episodes": 1,
         "genres": [
@@ -218,8 +218,8 @@
         "id": 48736,
         "title": "Sono Bisque Doll wa Koi wo Suru",
         "main_picture": {
-          "medium": "https://cdn.myanimelist.net/images/anime/1179/119897.webp",
-          "large": "https://cdn.myanimelist.net/images/anime/1179/119897l.webp"
+          "medium": "https://cdn.myanimelist.net/images/anime/1179/119897.jpg",
+          "large": "https://cdn.myanimelist.net/images/anime/1179/119897l.jpg"
         },
         "num_episodes": 12,
         "genres": [
@@ -262,8 +262,8 @@
         "id": 62896,
         "title": "Chou Kaguya-hime!",
         "main_picture": {
-          "medium": "https://cdn.myanimelist.net/images/anime/1951/160671.jpg",
-          "large": "https://cdn.myanimelist.net/images/anime/1951/160671l.jpg"
+          "medium": "https://cdn.myanimelist.net/images/anime/1951/160671.webp",
+          "large": "https://cdn.myanimelist.net/images/anime/1951/160671l.webp"
         },
         "num_episodes": 1,
         "genres": [
@@ -288,7 +288,7 @@
             "name": "Supernatural"
           }
         ],
-        "mean": 8.44,
+        "mean": 8.43,
         "average_episode_duration": 8433,
         "media_type": "ona",
         "start_season": {
